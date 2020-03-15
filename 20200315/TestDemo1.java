@@ -96,6 +96,7 @@ public class TestDemo1 {
 }
 */
 
+/*
 public class TestDemo1 {
     public static void main(String[] args) {
         int[] array = {1,2,3,4,5,6};
@@ -112,3 +113,117 @@ public class TestDemo1 {
     }
 }
 
+*/
+
+/*
+public class TestDemo1 {
+    public static void main(String[] args) {
+        int[] array = {1,2,3,4,5,6};
+        double ret = avgArray(array);
+        System.out.println(ret);
+    }
+
+    public static double avgArray(int[] array) {
+        double ret = 0;
+        for(int i = 0;i<array.length;i++) {
+
+            ret = ret +array[i];
+        }
+        double x = ret/(array.length);
+        return x;
+    }
+}
+*/
+
+/*
+public class TestDemo1 {
+    public static void main(String[] args) {
+        int[] array = {1,2,3,4,5,6};
+        int ret = sumArray(array);
+        System.out.println(ret);
+    }
+
+    public static int sumArray(int[] array) {
+        int ret = 0;
+        for(int i = 0;i<array.length;i++) {
+
+            ret = ret +array[i];
+        }
+
+        return ret;
+    }
+}
+
+
+*/
+
+/*
+public class TestDemo1 {
+    public static void main(String[] args) {
+        int[] array = {1,2,3,4,5,6};
+        int[] ret = transformArray(array);
+        System.out.println(Arrays.toString(ret));
+    }
+
+    public static int[] transformArray(int[] array) {
+        int[] array2 = new int[array.length];
+        for(int i = 0;i<array.length;i++) {
+                array2[i] = array[i]*2;
+
+        }
+
+        return array2;
+    }
+}
+
+*/
+
+/*
+public class TestDemo1 {
+    public static void main(String[] args) {
+        int[] array = {1,2,3,4,5,6};
+         printArray(array);
+
+    }
+
+    public static void printArray(int[] array) {
+
+        for(int i = 0;i<array.length;i++) {
+
+            System.out.println(array[i]);
+        }
+
+
+    }
+}
+*/
+/*
+public class TestDemo1 {
+    public static void main(String[] args) {
+        int[] array = new int[100];
+        int a = 1;
+        for (int i = 0; i < array.length; i++) {
+            array[i] = a;
+            a++;
+        }
+        for (int i = 0; i < array.length; i++) {
+            System.out.println(array[i]);
+        }
+
+
+    }
+}*/
+
+/*
+    public static void printArray(int[] array) {
+
+        for(int i = 0;i<array.length;i++) {
+
+            System.out.println(array[i]);
+        }
+
+
+    }
+}
+
+*/
