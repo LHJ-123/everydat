@@ -1,4 +1,4 @@
-public class Bird extends  Animal {
+/*public class Bird extends  Animal {
     public int age;
 
     public Bird(String name,int age) {
@@ -14,4 +14,4 @@ public class Bird extends  Animal {
         System.out.println(this.name + "正在吃!");
         System.out.println(super.name);
     }
-}
+}*/

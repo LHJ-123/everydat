@@ -1,6 +1,7 @@
 import org.w3c.dom.ls.LSOutput;
 
-public class Animal {
+/*
+public  class Animal {
     public String name;
 
     public Animal(String name) {
@@ -11,3 +12,4 @@ public class Animal {
         System.out.println(this.name + "正在吃!");
     }
 }
+*/
