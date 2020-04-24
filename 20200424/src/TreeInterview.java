@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 class TreeNode {
@@ -91,6 +93,59 @@ public class TreeInterview {
             }
         }
 
+    }
+//判断一个数是否为完全二叉树
+    public boolean isComplete(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        boolean isFirstStep = true;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            TreeNode cur = queue.poll();
+            if (isFirstStep) {
+                if (cur.left != null&&cur.right != null) {
+                    queue.offer(cur.left);
+                    queue.offer(cur.right);
+                }else if(cur.right != null && cur.left==null) {
+                    return false;
+                }else if (cur.left!=null&&cur.right == null) {
+                    isFirstStep = false;
+                    queue.offer(cur.left);
+
+                }else {
+                    isFirstStep = false;
+                }
+            }else {
+                if (cur.left!=null||cur.right!=null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    private List<List<Integer>> result = new ArrayList<>();
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return result;
+        }
+        result.clear();
+        levelOrderHelper(root,0);
+        return result;
+    }
+    private void levelOrderHelper(TreeNode root,int level) {
+        if (level == result.size()) {
+            result.add(new ArrayList<>());
+        }
+        List<Integer> curRow = result.get(level);
+        curRow.add(root.val);
+        if (root.left!=null) {
+            levelOrderHelper(root.left,level+1);
+        }
+        if (root.right!=null) {
+            levelOrderHelper(root.right,level+1);
+        }
     }
 
 
