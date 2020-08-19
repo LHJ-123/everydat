@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class DBUtil {
     private static final String url = "jdbc:mysql://127.0.0.1:3306/order_system?characterEncoding=utf-8&useSSL=true";
     private static final String username = "root";
-    private static final String password = "xxxxxx";
+    private static final String password = "";
     private static DataSource dataSource = null;
 
     public static DataSource getDataSource() {
