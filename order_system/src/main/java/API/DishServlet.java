@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/dish")
@@ -101,6 +102,7 @@ public class DishServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Dish> dishes = new ArrayList<>();
         req.setCharacterEncoding("utf-8");
         resp.setContentType("application/json; charset=utf-8");
         Response response = new Response();
@@ -110,19 +112,18 @@ public class DishServlet extends HttpServlet {
                 throw new OrderSystemException("您当前未登录");
             }
             User user = (User)session.getAttribute("user");
-            if (user.getIsAdmin() == 0) {
+            /*if (user.getIsAdmin() == 0) {
                 throw new OrderSystemException("您不是管理员");
-            }
+            }*/
             DishDao dishDao = new DishDao();
-            List<Dish> dishList = dishDao.selectAll();
-           String jsonString = gson.toJson(dishList);
+             dishes = dishDao.selectAll();
+           String jsonString = gson.toJson(dishes);
             resp.getWriter().write(jsonString);
 
         } catch (OrderSystemException | SQLException e) {
             e.printStackTrace();
-            response.ok = 0;
-            response.reason = e.getMessage();
-            String jsonString = gson.toJson(response);
+
+            String jsonString = gson.toJson(dishes);
             resp.getWriter().write(jsonString);
         }
     }

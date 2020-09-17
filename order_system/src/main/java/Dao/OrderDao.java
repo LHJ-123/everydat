@@ -96,8 +96,56 @@ public class OrderDao {
         }
 
     }
+    public void deleteOrder(int orderId) throws OrderSystemException, SQLException {
+        deleteOrderUser1(orderId);
+        deleteOrderDish(orderId);
+    }
 
-public List<Order> selectAll() throws SQLException {
+    private void deleteOrderDish(int orderId) throws SQLException, OrderSystemException {
+        Connection connection = DBUtil.getConnection();
+        PreparedStatement statement = null;
+        try {
+            String sql = "delete from order_dish where orderId = ?";
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1,orderId);
+            int ret = statement.executeUpdate();
+            if (ret != 1) {
+                throw new OrderSystemException("删除失败");
+            }
+            System.out.println("删除成功");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (OrderSystemException e) {
+            e.printStackTrace();
+            throw  new OrderSystemException("删除失败");
+        } finally {
+            DBUtil.close(connection,statement,null);
+        }
+    }
+    private void deleteOrderUser1(int orderId) throws OrderSystemException, SQLException {
+        Connection connection = DBUtil.getConnection();
+        PreparedStatement preparedStatement = null;
+        try {
+            String sql = "delete from order_user where orderId = ?";
+            preparedStatement=connection.prepareStatement(sql);
+            preparedStatement.setInt(1,orderId);
+            int ret = preparedStatement.executeUpdate();
+            if(ret != 1) {
+                throw new OrderSystemException("删除失败");
+            }
+            System.out.println("删除成功");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (OrderSystemException e) {
+            e.printStackTrace();
+            throw  new OrderSystemException("删除失败");
+        } finally {
+            DBUtil.close(connection,preparedStatement,null);
+        }
+
+    }
+
+    public List<Order> selectAll() throws SQLException {
         List<Order> orders = new ArrayList<>();
         Connection connection = DBUtil.getConnection();
         PreparedStatement preparedStatement = null;
@@ -121,8 +169,44 @@ public List<Order> selectAll() throws SQLException {
     }
     return orders;
 }
+    public Order findDetailedOrder(int orderId) throws SQLException {
+        //现根据订单号找到订单
+        Order order = buildOrder(orderId);
+        //将订单中的所有点的菜品加到订单中 让订单信息完整
+        buildOrderDishes(order, orderId);
+        return order;
+    }
 
-public List<Order> selectByUserId(int userId) throws SQLException {
+    private void buildOrderDishes(Order order, int orderId) throws SQLException {
+        Connection connection = DBUtil.getConnection();
+        String sql = "select * from dish where dishId in " +
+                "(select dishId from order_dish where orderId = ?)";
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<Dish> dishes = new ArrayList<>();
+        try {
+            assert connection != null;
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, orderId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Dish dish = new Dish();
+                dish.setDishId(resultSet.getInt("dishId"));
+                dish.setName(resultSet.getString("name"));
+                dish.setPrice(resultSet.getInt("price"));
+                dishes.add(dish);
+
+            }
+            order.setDishes(dishes);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close(connection, statement, resultSet);
+        }
+    }
+
+
+    public List<Order> selectByUserId(int userId) throws SQLException {
     List<Order> orders = new ArrayList<>();
         Connection connection = DBUtil.getConnection();
         PreparedStatement preparedStatement = null;

@@ -43,6 +43,9 @@ public class OrderServlet extends HttpServlet {
             }
             String body = OrderSystemUtil.readBody(req);
             Integer[] dishIds = gson.fromJson(body,Integer[].class);
+            if (dishIds == null || dishIds.length == 0) {
+                throw new OrderSystemException("未选菜, 请先选择你喜欢的菜");
+            }
             Order order = new Order();
             order.setUserId(user.getUserId());
             List<Dish> dishes = new ArrayList<>();
@@ -51,6 +54,7 @@ public class OrderServlet extends HttpServlet {
                 dish.setDishId(dishId);
                 dishes.add(dish);
             }
+
             order.setDishes(dishes);
             OrderDao orderDao = new OrderDao();
             orderDao.add(order);
@@ -72,6 +76,7 @@ public class OrderServlet extends HttpServlet {
         req.setCharacterEncoding("utf-8");
         resp.setContentType("application/json; charset=utf-8");
         Response response = new Response();
+        List<Order> orders = new ArrayList<>();
         try {
             HttpSession session = req.getSession(false);
             if (session == null) {
@@ -84,7 +89,7 @@ public class OrderServlet extends HttpServlet {
             String orderIdStr = req.getParameter("orderId");
             OrderDao orderDao = new OrderDao();
             if (orderIdStr == null) {
-                List<Order> orders = null;
+
 
                 if (user.getIsAdmin() == 0) {
                     orders = orderDao.selectByUserId(user.getUserId());
@@ -105,9 +110,7 @@ public class OrderServlet extends HttpServlet {
 
         } catch (OrderSystemException | SQLException e) {
             e.printStackTrace();
-            response.ok = 0;
-            response.reason = e.getMessage();
-            String jsonString = gson.toJson(response);
+            String jsonString = gson.toJson(orders);
             resp.getWriter().write(jsonString);
         }
     }
@@ -143,6 +146,50 @@ public class OrderServlet extends HttpServlet {
             e.printStackTrace();
             response.ok = 0;
             response.reason = e.getMessage();
+        } finally {
+            resp.setContentType("application/json; charset=utf-8");
+            String jsonString = gson.toJson(response);
+            resp.getWriter().write(jsonString);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("utf-8");
+        Response response = new Response();
+        try {
+            HttpSession session = req.getSession(false);
+            if (session == null) {
+                throw new OrderSystemException("您当前未登录");
+            }
+            User user = (User) session.getAttribute("user");
+            String orderIdStr = req.getParameter("orderId");
+            if (orderIdStr == null) {
+                throw new OrderSystemException("参数不正确");
+            }
+            if (user.getIsAdmin() == 0) {
+                //不是管理员
+                throw new OrderSystemException("非管理员不可删除订单");
+            }
+
+            //找到这个订单查看是否已经完成该订单
+            int orderId = Integer.parseInt(orderIdStr);
+            OrderDao dao = new OrderDao();
+            Order order = dao.findDetailedOrder(orderId);
+            if (order == null) {
+                throw new OrderSystemException("数据错误");
+            }
+            if (order.getIsDone() == 0) {
+                //该订单还未完成
+                throw new OrderSystemException("该订单还未完成");
+            }
+            dao.deleteOrder(orderId);
+            response.ok = 1;
+            response.reason = "";
+        } catch (OrderSystemException | SQLException e) {
+            e.printStackTrace();
+            response.ok = 1;
+            response.reason = "";
         } finally {
             resp.setContentType("application/json; charset=utf-8");
             String jsonString = gson.toJson(response);
