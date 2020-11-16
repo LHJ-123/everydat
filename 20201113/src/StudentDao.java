@@ -84,7 +84,7 @@ public class StudentDao {
             preparedStatement.setString(1,sno);
             resultSet= preparedStatement.executeQuery();
             Student student = new Student();
-           if (resultSet != null) {
+           if (resultSet.next()) {
 
                student.setSno(resultSet.getString("sno"));
                student.setName(resultSet.getString("name"));

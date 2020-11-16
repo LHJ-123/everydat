@@ -88,8 +88,12 @@ public class SwingLoginExample {
                    String sno = userText.getText();
                    String name = nameText.getText();
                    String sex = (String)jComboBox.getSelectedItem();
-               if (sno == null || name == null || sex == null) {
+               if (sno.length() == 0 || name.length() == 0 || sex.length() == 0) {
                    System.out.println("信息不完整不能添加");
+                   return;
+               }
+               if (studentDao.find(sno) != null) {
+                   System.out.println("该学号已被注册");
                    return;
                }
                    student.setSno(sno);
