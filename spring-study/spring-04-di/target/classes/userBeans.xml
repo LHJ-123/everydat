@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--加第三行进行p注入-->
+    <!--加第四行进行c注入-->
+
+
+    <bean id="user" class="User" p:name="你好" p:age="20"/>
+    <bean id="user2" class="User" c:name="你好2" c:age="21"/>
+
+    <bean id="user3" class="User" c:name="你好2" c:age="21" scope="prototype"/>
+
+
+
+</beans>

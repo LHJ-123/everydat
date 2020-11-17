@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:annotation-config/>
+<!--注解支持-->
+
+    <!--使用这种注解方式就可以省略set方法了-->
+    <bean id="dog22" class="Dog"/>
+    <bean id="cat" class="Cat"/>
+    <bean id="cat22" class="Cat"/>
+
+    <bean id="people" class="People"/>
+
+   <!-- <bean id="people" class="People">
+        <property name="name" value="小明"/>
+        <property name="cat" ref="cat"/>
+        <property name="dog" ref="dog"/>
+    </bean>-->
+
+    <!--
+    byName 会自动在容器上下文中查找，和自己对象set方法后面的值对应的beanid !
+    -->
+  <!--  <bean id="people" class="People" autowire="byName">
+        <property name="name" value="小明"/>
+    </bean>-->
+
+    <!--
+    byType 会自动在容器上下文中查找，和自己对象类型一样的bean!
+    -->
+   <!-- <bean id="people1" class="People" autowire="byType">
+        <property name="name" value="小明"/>
+    </bean>-->
+
+</beans>

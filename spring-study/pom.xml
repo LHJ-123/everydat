@@ -13,6 +13,10 @@
         <module>spring-02-hellospring</module>
         <module>spring-03-ioc2</module>
         <module>spring-04-di</module>
+        <module>spring-06-Autowired</module>
+        <module>spring-07-anno</module>
+        <module>spring-08-appconfig</module>
+        <module>spring-09-proxy</module>
     </modules>
 
     <dependencies>
